@@ -3,7 +3,8 @@ package main
 import (
 	"log"
 
-	_ "github.com/Killarun48/pp/1.7.2/proxy/docs"
+	//_ "test/1.7.2/proxy/docs"
+	_ "test/docs"
 )
 
 // @title ГеоAPI
