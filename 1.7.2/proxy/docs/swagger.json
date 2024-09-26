@@ -1,0 +1,151 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Поиск информации по адресу или координатам",
+        "title": "ГеоAPI",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/api/address/geocode": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api"
+                ],
+                "summary": "Обратное геокодирование (адрес по координатам)",
+                "parameters": [
+                    {
+                        "description": "Координаты. lat - Географическая широта. lng - Географическая долгота.",
+                        "name": "lat,lng",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.RequestAddressGeocode"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.ResponseAddress"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/address/search": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api"
+                ],
+                "summary": "Геокодирование (координаты по адресу)",
+                "parameters": [
+                    {
+                        "description": "Адрес",
+                        "name": "query",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.RequestAddressSearch"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.ResponseAddress"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "main.Address": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "type": "string",
+                    "example": "Санкт-Петербург"
+                },
+                "house": {
+                    "type": "string",
+                    "example": "14"
+                },
+                "lat": {
+                    "type": "string",
+                    "example": "59.923013"
+                },
+                "lon": {
+                    "type": "string",
+                    "example": "30.318105"
+                },
+                "street": {
+                    "type": "string",
+                    "example": "Московский"
+                }
+            }
+        },
+        "main.RequestAddressGeocode": {
+            "type": "object",
+            "properties": {
+                "lat": {
+                    "type": "string",
+                    "example": "59.923013"
+                },
+                "lng": {
+                    "type": "string",
+                    "example": "30.318105"
+                }
+            }
+        },
+        "main.RequestAddressSearch": {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "string",
+                    "example": "Московский проспект 14"
+                }
+            }
+        },
+        "main.ResponseAddress": {
+            "type": "object",
+            "properties": {
+                "addresses": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/main.Address"
+                    }
+                }
+            }
+        }
+    }
+}
