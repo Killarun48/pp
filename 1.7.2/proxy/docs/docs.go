@@ -48,7 +48,8 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "example": "json: cannot unmarshal array into Go value of type main.RequestAddressGeocode"
                         }
                     }
                 }
@@ -87,7 +88,8 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "example": "json: cannot unmarshal array into Go value of type main.RequestAddressGeocode"
                         }
                     }
                 }
