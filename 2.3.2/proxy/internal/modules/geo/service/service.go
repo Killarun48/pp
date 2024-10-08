@@ -13,7 +13,12 @@ type GeoService struct {
 	geoProvider GeoProvider
 }
 
-func NewGeoService(geoProvider GeoProvider) *GeoService {
+type GeoServicer interface {
+	AddressSearch(input string) ([]*models.Address, error)
+	GeoCode(lat, lng string) ([]*models.Address, error)
+}
+
+func NewGeoService(geoProvider GeoProvider) GeoServicer {
 	return &GeoService{
 		geoProvider: geoProvider,
 	}
