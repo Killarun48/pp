@@ -184,7 +184,7 @@ func (uc UserController) Delete(w http.ResponseWriter, r *http.Request) {
 }
 
 // @Summary Получение всех пользователей
-// @Description Возвращает всех пользователей, включая "удаленных". Offset может использоваться только вместе с Limit!
+// @Description Возвращает всех пользователей, включая "удаленных". Offset может использоваться только вместе с Limit! Для Limit ограничений нет.
 // @Tags users
 // @Accept json
 // @Produce json
