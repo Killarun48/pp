@@ -1,0 +1,20 @@
+#version: '3'
+
+services:
+  app:
+    restart: always
+    build: .
+    depends_on:
+            - db
+    #env_file:
+    #  - ./proxy/.env
+    ports:
+      - "8080:8080"
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+        - "${DB_PORT}:${DB_PORT}"

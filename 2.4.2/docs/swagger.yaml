@@ -1,0 +1,191 @@
+basePath: /
+definitions:
+  controller.RequestUser:
+    properties:
+      email:
+        example: wick@continental.com
+        type: string
+      name:
+        example: John Wick
+        type: string
+    type: object
+  models.User:
+    properties:
+      deleted_at:
+        $ref: '#/definitions/sql.NullTime'
+      email:
+        example: wick@continental.com
+        type: string
+      id:
+        example: 999
+        type: integer
+      name:
+        example: John Wick
+        type: string
+    type: object
+  responder.Response:
+    properties:
+      message:
+        example: user deleted
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  sql.NullTime:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API для взаимодействия с пользователями.
+  title: API
+  version: "1.0"
+paths:
+  /api/users:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает всех пользователей, включая "удаленных". Offset может
+        использоваться только вместе с Limit!
+      parameters:
+      - description: Параметры пагинации
+        in: query
+        name: limit
+        type: integer
+      - description: Параметры пагинации
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responder.Response'
+      summary: Получение всех пользователей
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Данные пользователя
+        in: body
+        name: name,email
+        required: true
+        schema:
+          $ref: '#/definitions/controller.RequestUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responder.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responder.Response'
+      summary: Создание пользователя
+      tags:
+      - users
+  /api/users/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID пользователя
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responder.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responder.Response'
+      summary: Удаление пользователя
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: Данный метод не возращает удаленного пользователя, используйте
+        "Получение всех пользователей"
+      parameters:
+      - description: ID пользователя
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responder.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responder.Response'
+      summary: Поиск пользователя по ID
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Данные пользователя
+        in: body
+        name: name,email
+        required: true
+        schema:
+          $ref: '#/definitions/controller.RequestUser'
+      - description: ID пользователя
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responder.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responder.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responder.Response'
+      summary: Обновление данных пользователя
+      tags:
+      - users
+swagger: "2.0"
