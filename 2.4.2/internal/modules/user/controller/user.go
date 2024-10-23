@@ -77,7 +77,7 @@ func (uc UserController) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 // @Summary Поиск пользователя по ID
-// @Description Данный метод не возращает удаленного пользователя, используйте "Получение всех пользователей"
+// Данный метод не возращает удаленного пользователя, используйте "Получение всех пользователей"
 // @Tags users
 // @Accept json
 // @Produce json
@@ -101,23 +101,21 @@ func (uc UserController) GetByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res, err := json.Marshal(user)
+	jsonResp, err := json.MarshalIndent(user, "", "  ")
 	if err != nil {
-		/* w.WriteHeader(http.StatusBadGateway)
-		fmt.Fprintln(w, err.Error()) */
 		uc.responder.ErrorBadRequest(w, err)
 		return
 	}
 
-	fmt.Fprintln(w, string(res))
+	fmt.Fprintln(w, string(jsonResp))
 }
 
 // @Summary Обновление данных пользователя
 // @Tags users
 // @Accept json
 // @Produce json
-// @Param name,email body RequestUser true "Данные пользователя"
 // @Param id path int true "ID пользователя"
+// @Param name,email body RequestUser true "Данные пользователя"
 // @Success 200 {object} responder.Response
 // @Failure 400,404 {object} responder.Response
 // @Router /api/users/{id} [post]
@@ -210,13 +208,11 @@ func (uc UserController) List(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res, err := json.Marshal(users)
+	jsonResp, err := json.MarshalIndent(users, "", "  ")
 	if err != nil {
-		/* w.WriteHeader(http.StatusBadGateway)
-		fmt.Fprintln(w, err.Error()) */
 		uc.responder.ErrorBadRequest(w, err)
 		return
 	}
 
-	fmt.Fprintln(w, string(res))
+	fmt.Fprintln(w, string(jsonResp))
 }

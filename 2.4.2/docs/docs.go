@@ -17,7 +17,7 @@ const docTemplate = `{
     "paths": {
         "/api/users": {
             "get": {
-                "description": "Возвращает всех пользователей, включая \"удаленных\". Offset может использоваться только вместе с Limit!",
+                "description": "Возвращает всех пользователей, включая \"удаленных\". Offset может использоваться только вместе с Limit! Для Limit ограничений нет.",
                 "consumes": [
                     "application/json"
                 ],
@@ -100,7 +100,6 @@ const docTemplate = `{
         },
         "/api/users/{id}": {
             "get": {
-                "description": "Данный метод не возращает удаленного пользователя, используйте \"Получение всех пользователей\"",
                 "consumes": [
                     "application/json"
                 ],
@@ -154,6 +153,13 @@ const docTemplate = `{
                 "summary": "Обновление данных пользователя",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "ID пользователя",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "description": "Данные пользователя",
                         "name": "name,email",
                         "in": "body",
@@ -161,13 +167,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/controller.RequestUser"
                         }
-                    },
-                    {
-                        "type": "integer",
-                        "description": "ID пользователя",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
                     }
                 ],
                 "responses": {
@@ -246,7 +245,8 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "deleted_at": {
-                    "$ref": "#/definitions/sql.NullTime"
+                    "type": "string",
+                    "example": "2022-02-01T00:00:00Z"
                 },
                 "email": {
                     "type": "string",
@@ -272,18 +272,6 @@ const docTemplate = `{
                 "success": {
                     "type": "boolean",
                     "example": true
-                }
-            }
-        },
-        "sql.NullTime": {
-            "type": "object",
-            "properties": {
-                "time": {
-                    "type": "string"
-                },
-                "valid": {
-                    "description": "Valid is true if Time is not NULL",
-                    "type": "boolean"
                 }
             }
         }

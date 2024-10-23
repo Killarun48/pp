@@ -13,8 +13,8 @@ type DataBaseSqlite struct {
 	DB *sql.DB
 }
 
-func NewDataBaseSqlite() (*DataBaseSqlite, error) {
-	db, err := sql.Open("sqlite3", "users.db")
+func NewDataBaseSqlite(path string) (*DataBaseSqlite, error) {
+	db, err := sql.Open("sqlite3", path)
 	if err != nil {
 		return nil, err
 	}

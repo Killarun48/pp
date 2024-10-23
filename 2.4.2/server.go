@@ -20,6 +20,8 @@ import (
 	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
 
+var pathDB = ""
+
 type Server struct {
 	srv     *http.Server
 	users   map[string]string
@@ -28,37 +30,27 @@ type Server struct {
 
 func NewServer(addr string) *Server {
 
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
+	godotenv.Load()
 
 	server := &Server{
 		sigChan: make(chan os.Signal, 1),
 		users:   make(map[string]string),
 	}
 
-	signal.Notify(server.sigChan, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
+	var sygnals = make([]os.Signal, 3)
+	sygnals = append(sygnals, syscall.SIGINT)
+	sygnals = append(sygnals, syscall.SIGTERM)
+	sygnals = append(sygnals, os.Interrupt)
+
+	signal.Notify(server.sigChan, sygnals...)
 
 	// Инициализируем маршруты
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
+	
+	DB := db.SelectDB(pathDB)
 
-	//bd, err := db.NewDataBaseSqlite()
-	bd, err := db.NewDataBasePostgres()
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-
-	err = bd.Migrate()
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-
-	repositories := modules.NewRepository(bd.DB)
+	repositories := modules.NewRepository(DB)
 
 	services := modules.NewService(repositories)
 	respond := responder.NewResponder()
@@ -79,9 +71,9 @@ func NewServer(addr string) *Server {
 	}
 
 	server.srv = srv
-	
+
 	time.Sleep(1 * time.Second)
-	
+
 	return server
 }
 

@@ -12,7 +12,8 @@ definitions:
   models.User:
     properties:
       deleted_at:
-        $ref: '#/definitions/sql.NullTime'
+        example: "2022-02-01T00:00:00Z"
+        type: string
       email:
         example: wick@continental.com
         type: string
@@ -32,14 +33,6 @@ definitions:
         example: true
         type: boolean
     type: object
-  sql.NullTime:
-    properties:
-      time:
-        type: string
-      valid:
-        description: Valid is true if Time is not NULL
-        type: boolean
-    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -52,7 +45,7 @@ paths:
       consumes:
       - application/json
       description: Возвращает всех пользователей, включая "удаленных". Offset может
-        использоваться только вместе с Limit!
+        использоваться только вместе с Limit! Для Limit ограничений нет.
       parameters:
       - description: Параметры пагинации
         in: query
@@ -129,8 +122,6 @@ paths:
     get:
       consumes:
       - application/json
-      description: Данный метод не возращает удаленного пользователя, используйте
-        "Получение всех пользователей"
       parameters:
       - description: ID пользователя
         in: path
@@ -159,17 +150,17 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: ID пользователя
+        in: path
+        name: id
+        required: true
+        type: integer
       - description: Данные пользователя
         in: body
         name: name,email
         required: true
         schema:
           $ref: '#/definitions/controller.RequestUser'
-      - description: ID пользователя
-        in: path
-        name: id
-        required: true
-        type: integer
       produces:
       - application/json
       responses:
